@@ -35,12 +35,23 @@ function PaymentContent() {
   const route = useRoute();
   const navigation = useNavigation();
   const { partyId, amount } = route.params;
-  const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  let stripe = null;
+  try {
+    stripe = useStripe();
+  } catch (error) {
+    console.warn('Stripe not available:', error);
+  }
+  const { initPaymentSheet, presentPaymentSheet } = stripe || {};
   const { isDevMode } = useDevModeStore();
   const [loading, setLoading] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState(null);
 
   const handleStripePayment = async () => {
+    if (!initPaymentSheet || !presentPaymentSheet) {
+      Alert.alert('Error', 'Stripe is not available. Please configure Stripe or use PayPal.');
+      return;
+    }
+    
     setLoading(true);
     try {
       const response = await api.post('/payments/create-checkout-session', {
@@ -188,11 +199,33 @@ function PaymentContent() {
 }
 
 export default function PaymentScreen() {
-  return (
-    <StripeProvider publishableKey={STRIPE_PUBLISHABLE_KEY}>
-      <PaymentContent />
-    </StripeProvider>
-  );
+  // Only wrap with StripeProvider if we have a valid key
+  if (!STRIPE_PUBLISHABLE_KEY || STRIPE_PUBLISHABLE_KEY.includes('your_') || STRIPE_PUBLISHABLE_KEY.length < 20) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+        <Text style={{ color: theme.colors.text, textAlign: 'center' }}>
+          Stripe is not configured. Please set EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY in your environment variables.
+        </Text>
+      </View>
+    );
+  }
+
+  try {
+    return (
+      <StripeProvider publishableKey={STRIPE_PUBLISHABLE_KEY}>
+        <PaymentContent />
+      </StripeProvider>
+    );
+  } catch (error) {
+    console.error('Stripe initialization error:', error);
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+        <Text style={{ color: theme.colors.text, textAlign: 'center' }}>
+          Payment system unavailable. Please try again later.
+        </Text>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
