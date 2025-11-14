@@ -22,21 +22,21 @@ if (getApps().length === 0) {
   app = getApps()[0];
 }
 
-// Initialize Auth - wait a bit to ensure Firebase is ready
+// Initialize Auth
 let auth;
 try {
-  // Small delay to ensure Firebase is fully initialized
   auth = getAuth(app);
+  // Ensure auth is ready
+  if (!auth) {
+    throw new Error('Auth not initialized');
+  }
 } catch (error) {
   console.error('Firebase Auth initialization error:', error);
-  // Retry after a short delay
-  setTimeout(() => {
-    try {
-      auth = getAuth(app);
-    } catch (retryError) {
-      console.error('Firebase Auth retry failed:', retryError);
-    }
-  }, 100);
+  // Create a minimal auth object to prevent crashes
+  auth = {
+    currentUser: null,
+    onAuthStateChanged: () => () => {},
+  };
 }
 
 // Initialize Firestore
