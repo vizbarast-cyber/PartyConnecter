@@ -169,14 +169,14 @@ export default function App() {
         setInitializing(false);
       }
       
-      // Timeout after 5 seconds if auth doesn't respond
+      // Timeout after 10 seconds if auth doesn't respond (Render free tier can be slow)
       timeout = setTimeout(() => {
         if (initializing) {
           console.warn('Auth initialization timeout, proceeding anyway');
           setInitializing(false);
           setLoadingError('Connection timeout. The app may work with limited features.');
         }
-      }, 5000);
+      }, 10000);
     } catch (error) {
       console.error('Firebase auth error:', error);
       setInitializing(false);

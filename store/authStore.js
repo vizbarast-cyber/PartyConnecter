@@ -11,9 +11,9 @@ export const useAuthStore = create((set) => ({
     set({ user: firebaseUser, loading: false });
     if (firebaseUser) {
       try {
-        // Add timeout to prevent hanging (reduced to 5 seconds)
+        // Add timeout to prevent hanging (10 seconds for Render free tier cold starts)
         const timeoutPromise = new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Request timeout')), 5000)
+          setTimeout(() => reject(new Error('Request timeout')), 10000)
         );
         
         const response = await Promise.race([
