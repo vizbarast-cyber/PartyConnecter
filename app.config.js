@@ -53,7 +53,14 @@ module.exports = {
       "expo-camera",
       "expo-image-picker",
       "expo-location",
-      "expo-notifications"
+      "expo-notifications",
+      [
+        "@stripe/stripe-react-native",
+        {
+          merchantIdentifier: "merchant.com.mycompany.partyconnect",
+          enableGooglePay: true,
+        }
+      ]
     ],
     extra: {
       eas: {
