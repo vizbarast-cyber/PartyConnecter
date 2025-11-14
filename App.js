@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { StatusBar } from 'expo-status-bar';
-import { ActivityIndicator, View, Text, TouchableOpacity, TextInput, Modal, Alert } from 'react-native';
+import { ActivityIndicator, View, Text, TouchableOpacity, TextInput, Modal, Alert, Image } from 'react-native';
 import { auth } from './config/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -205,10 +205,37 @@ export default function App() {
   if (initializing || loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.colors.background, padding: 20 }}>
-        <ActivityIndicator size="large" color={theme.colors.primary} />
-        <Text style={{ color: theme.colors.text, marginTop: 20, textAlign: 'center' }}>
-          Loading PartyConnect...
+        {/* PartyConnect Logo */}
+        <Image
+          source={require('./assets/icon.png')}
+          style={{
+            width: 120,
+            height: 120,
+            marginBottom: 30,
+            borderRadius: 24,
+            ...theme.shadows.card,
+          }}
+          resizeMode="contain"
+        />
+        
+        {/* App Name */}
+        <Text style={{ 
+          color: theme.colors.primary, 
+          fontSize: theme.fontSizes.h3, 
+          fontWeight: 'bold',
+          marginBottom: 10,
+          textAlign: 'center',
+        }}>
+          PartyConnect
         </Text>
+        
+        {/* Loading Indicator */}
+        <ActivityIndicator size="large" color={theme.colors.primary} style={{ marginTop: 10 }} />
+        
+        <Text style={{ color: theme.colors.textMuted, marginTop: 20, textAlign: 'center', fontSize: theme.fontSizes.sm }}>
+          Loading...
+        </Text>
+        
         {loadingError && (
           <>
             <Text style={{ color: theme.colors.error, marginTop: 20, textAlign: 'center', fontSize: 14 }}>
