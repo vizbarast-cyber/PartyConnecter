@@ -13,6 +13,7 @@ import { StripeProvider, useStripe } from '@stripe/stripe-react-native';
 import { api } from '../../services/api';
 import { useDevModeStore } from '../../store/devModeStore';
 import { theme } from '../../config/theme';
+import Constants from 'expo-constants';
 
 // Get Stripe publishable key from environment or app config
 const getStripePublishableKey = () => {
@@ -21,7 +22,6 @@ const getStripePublishableKey = () => {
   }
   // Fallback to app config
   try {
-    const { Constants } = require('expo-constants');
     return Constants.expoConfig?.extra?.stripePublishableKey;
   } catch (e) {
     // Final fallback (should not be used in production)
