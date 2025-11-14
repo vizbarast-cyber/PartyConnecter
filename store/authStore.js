@@ -37,9 +37,13 @@ export const useAuthStore = create((set) => ({
       set({ userProfile: null });
     }
   },
+  bypassLoading: () => {
+    // Force set loading to false to bypass loading screen
+    set({ loading: false });
+  },
   signOut: async () => {
     await signOut(auth);
-    set({ user: null, userProfile: null });
+    set({ user: null, userProfile: null, loading: false });
   },
   updateUserProfile: (profile) => {
     set((state) => ({

@@ -146,7 +146,7 @@ export default function App() {
   const [devPassword, setDevPassword] = useState('');
   const [loadingError, setLoadingError] = useState(null);
   const [appError, setAppError] = useState(null);
-  const { user, setUser, loading } = useAuthStore();
+  const { user, setUser, loading, bypassLoading } = useAuthStore();
   const { checkDevMode, unlockDevMode, shouldShowModal, clearModalFlag } = useDevModeStore();
 
   useEffect(() => {
@@ -320,6 +320,7 @@ export default function App() {
               onPress={() => {
                 setInitializing(false);
                 setLoadingError(null);
+                bypassLoading(); // Force bypass loading state
               }}
             >
               <Text style={{ color: theme.colors.text, textAlign: 'center', fontWeight: 'bold' }}>
