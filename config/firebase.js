@@ -1,9 +1,8 @@
 // Firebase Web SDK Configuration (Expo Compatible)
 import { initializeApp, getApps } from 'firebase/app';
-import { getAuth, initializeAuth, getReactNativePersistence } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Firebase configuration from your google-services.json
 const firebaseConfig = {
@@ -23,22 +22,21 @@ if (getApps().length === 0) {
   app = getApps()[0];
 }
 
-// Initialize Auth with AsyncStorage persistence for React Native
+// Initialize Auth - wait a bit to ensure Firebase is ready
 let auth;
 try {
-  // Try to get existing auth instance first
-  try {
-    auth = getAuth(app);
-  } catch (e) {
-    // If getAuth fails, initialize with persistence
-    auth = initializeAuth(app, {
-      persistence: getReactNativePersistence(AsyncStorage),
-    });
-  }
+  // Small delay to ensure Firebase is fully initialized
+  auth = getAuth(app);
 } catch (error) {
   console.error('Firebase Auth initialization error:', error);
-  // Fallback: try getAuth again
-  auth = getAuth(app);
+  // Retry after a short delay
+  setTimeout(() => {
+    try {
+      auth = getAuth(app);
+    } catch (retryError) {
+      console.error('Firebase Auth retry failed:', retryError);
+    }
+  }, 100);
 }
 
 // Initialize Firestore
