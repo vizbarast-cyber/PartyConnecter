@@ -35,13 +35,7 @@ function PaymentContent() {
   const route = useRoute();
   const navigation = useNavigation();
   const { partyId, amount } = route.params;
-  let stripe = null;
-  try {
-    stripe = useStripe();
-  } catch (error) {
-    console.warn('Stripe not available:', error);
-  }
-  const { initPaymentSheet, presentPaymentSheet } = stripe || {};
+  const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const { isDevMode } = useDevModeStore();
   const [loading, setLoading] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState(null);
@@ -202,30 +196,19 @@ export default function PaymentScreen() {
   // Only wrap with StripeProvider if we have a valid key
   if (!STRIPE_PUBLISHABLE_KEY || STRIPE_PUBLISHABLE_KEY.includes('your_') || STRIPE_PUBLISHABLE_KEY.length < 20) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
-        <Text style={{ color: theme.colors.text, textAlign: 'center' }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: theme.colors.background }}>
+        <Text style={{ color: theme.colors.text, textAlign: 'center', fontSize: 16 }}>
           Stripe is not configured. Please set EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY in your environment variables.
         </Text>
       </View>
     );
   }
 
-  try {
-    return (
-      <StripeProvider publishableKey={STRIPE_PUBLISHABLE_KEY}>
-        <PaymentContent />
-      </StripeProvider>
-    );
-  } catch (error) {
-    console.error('Stripe initialization error:', error);
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
-        <Text style={{ color: theme.colors.text, textAlign: 'center' }}>
-          Payment system unavailable. Please try again later.
-        </Text>
-      </View>
-    );
-  }
+  return (
+    <StripeProvider publishableKey={STRIPE_PUBLISHABLE_KEY}>
+      <PaymentContent />
+    </StripeProvider>
+  );
 }
 
 const styles = StyleSheet.create({

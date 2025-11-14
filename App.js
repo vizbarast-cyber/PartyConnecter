@@ -148,12 +148,22 @@ export default function App() {
   const { checkDevMode, unlockDevMode, shouldShowModal, clearModalFlag } = useDevModeStore();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser);
-      if (initializing) setInitializing(false);
-    });
+    let unsubscribe;
+    try {
+      unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+        setUser(firebaseUser);
+        if (initializing) setInitializing(false);
+      });
+    } catch (error) {
+      console.error('Firebase auth error:', error);
+      setInitializing(false);
+    }
 
-    checkDevMode();
+    try {
+      checkDevMode();
+    } catch (error) {
+      console.error('Dev mode check error:', error);
+    }
 
     return unsubscribe;
   }, [initializing]);
