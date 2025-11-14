@@ -10,8 +10,7 @@
     "preview": {
       "distribution": "internal",
       "android": {
-        "buildType": "apk",
-        "applicationId": "com.mycompany.partyconnect"
+        "buildType": "apk"
       }
     },
     "production": {
