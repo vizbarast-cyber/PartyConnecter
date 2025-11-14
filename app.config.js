@@ -1,7 +1,7 @@
 // Dynamic app configuration based on environment
 const isDev = process.env.NODE_ENV !== 'production' && !process.env.EXPO_PUBLIC_ENV;
 
-export default {
+module.exports = {
   expo: {
     name: "PartyConnect",
     slug: "partyconnect",
