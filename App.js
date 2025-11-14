@@ -145,6 +145,7 @@ export default function App() {
   const [devModeModal, setDevModeModal] = useState(false);
   const [devPassword, setDevPassword] = useState('');
   const [loadingError, setLoadingError] = useState(null);
+  const [appError, setAppError] = useState(null);
   const { user, setUser, loading } = useAuthStore();
   const { checkDevMode, unlockDevMode, shouldShowModal, clearModalFlag } = useDevModeStore();
 
@@ -153,10 +154,20 @@ export default function App() {
     let timeout;
     
     try {
-      unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-        setUser(firebaseUser);
-        if (initializing) setInitializing(false);
-      });
+      if (auth && typeof onAuthStateChanged === 'function') {
+        unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+          try {
+            setUser(firebaseUser);
+            if (initializing) setInitializing(false);
+          } catch (error) {
+            console.error('Error in auth state change handler:', error);
+            if (initializing) setInitializing(false);
+          }
+        });
+      } else {
+        console.warn('Auth not available, skipping initialization');
+        setInitializing(false);
+      }
       
       // Timeout after 5 seconds if auth doesn't respond
       timeout = setTimeout(() => {
@@ -170,6 +181,7 @@ export default function App() {
       console.error('Firebase auth error:', error);
       setInitializing(false);
       setLoadingError('Failed to initialize. Please try again.');
+      setAppError(error.message);
     }
 
     try {
@@ -179,7 +191,13 @@ export default function App() {
     }
 
     return () => {
-      if (unsubscribe) unsubscribe();
+      if (unsubscribe && typeof unsubscribe === 'function') {
+        try {
+          unsubscribe();
+        } catch (error) {
+          console.error('Error unsubscribing from auth:', error);
+        }
+      }
       if (timeout) clearTimeout(timeout);
     };
   }, [initializing]);
@@ -192,36 +210,86 @@ export default function App() {
   }, [shouldShowModal, clearModalFlag]);
 
   const handleDevModeSubmit = async () => {
-    const success = await unlockDevMode(devPassword);
-    if (success) {
-      setDevModeModal(false);
-      setDevPassword('');
-      Alert.alert('Success', 'Developer Mode unlocked!');
-    } else {
-      Alert.alert('Error', 'Incorrect password');
+    try {
+      const success = await unlockDevMode(devPassword);
+      if (success) {
+        setDevModeModal(false);
+        setDevPassword('');
+        Alert.alert('Success', 'Developer Mode unlocked!');
+      } else {
+        Alert.alert('Error', 'Incorrect password');
+      }
+    } catch (error) {
+      console.error('Error in dev mode submit:', error);
+      Alert.alert('Error', 'Failed to unlock dev mode');
     }
   };
+
+  // Error boundary - show error screen if app crashes
+  if (appError) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.colors.background, padding: 20 }}>
+        <Text style={{ color: theme.colors.error, fontSize: 20, fontWeight: 'bold', marginBottom: 20 }}>
+          App Error
+        </Text>
+        <Text style={{ color: theme.colors.text, textAlign: 'center', marginBottom: 20 }}>
+          {appError}
+        </Text>
+        <TouchableOpacity
+          style={{
+            padding: 12,
+            backgroundColor: theme.colors.primary,
+            borderRadius: theme.borderRadius.md,
+            minWidth: 120,
+          }}
+          onPress={() => {
+            setAppError(null);
+            setInitializing(true);
+          }}
+        >
+          <Text style={{ color: theme.colors.text, textAlign: 'center', fontWeight: 'bold' }}>
+            Retry
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   if (initializing || loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.colors.background, padding: 20 }}>
-        {/* PartyConnect Logo */}
-        <Image
-          source={require('./assets/icon.png')}
-          style={{
-            width: 120,
-            height: 120,
-            marginBottom: 30,
-            borderRadius: 24,
-            ...theme.shadows.card,
-          }}
-          resizeMode="contain"
-        />
+        {/* PartyConnect Logo - with error handling */}
+        {(() => {
+          try {
+            return (
+              <Image
+                source={require('./assets/icon.png')}
+                style={{
+                  width: 120,
+                  height: 120,
+                  marginBottom: 30,
+                  borderRadius: 24,
+                }}
+                resizeMode="contain"
+                onError={(error) => {
+                  console.warn('Failed to load logo:', error);
+                }}
+              />
+            );
+          } catch (error) {
+            // Fallback to emoji if image fails
+            return (
+              <Text style={{ fontSize: 80, marginBottom: 30 }}>
+                🎉
+              </Text>
+            );
+          }
+        })()}
         
         {/* App Name */}
         <Text style={{ 
           color: theme.colors.primary, 
-          fontSize: theme.fontSizes.h3, 
+          fontSize: 24, 
           fontWeight: 'bold',
           marginBottom: 10,
           textAlign: 'center',
@@ -232,7 +300,7 @@ export default function App() {
         {/* Loading Indicator */}
         <ActivityIndicator size="large" color={theme.colors.primary} style={{ marginTop: 10 }} />
         
-        <Text style={{ color: theme.colors.textMuted, marginTop: 20, textAlign: 'center', fontSize: theme.fontSizes.sm }}>
+        <Text style={{ color: theme.colors.textMuted, marginTop: 20, textAlign: 'center', fontSize: 14 }}>
           Loading...
         </Text>
         
@@ -254,7 +322,7 @@ export default function App() {
                 setLoadingError(null);
               }}
             >
-              <Text style={{ color: theme.colors.textLight, textAlign: 'center', fontWeight: 'bold' }}>
+              <Text style={{ color: theme.colors.text, textAlign: 'center', fontWeight: 'bold' }}>
                 Continue Anyway
               </Text>
             </TouchableOpacity>
