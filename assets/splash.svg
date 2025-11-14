@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="2048" height="2048" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="2048" height="2048" fill="#0A0A0F"/>
+  
+  <!-- Gradient overlay -->
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#9D4EDD" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#0A0A0F" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="1024" cy="1024" r="1024" fill="url(#glow)"/>
+  
+  <!-- App name -->
+  <text x="1024" y="819.2" 
+        font-family="Arial, sans-serif" 
+        font-size="245.76" 
+        font-weight="bold" 
+        fill="#9D4EDD" 
+        text-anchor="middle"
+        style="text-shadow: 0 0 40.96px #9D4EDD;">
+    PartyConnect
+  </text>
+  
+  <!-- Tagline -->
+  <text x="1024" y="1126.4" 
+        font-family="Arial, sans-serif" 
+        font-size="81.92" 
+        fill="#E0AAFF" 
+        text-anchor="middle">
+    Connect. Party. Celebrate.
+  </text>
+  
+  <!-- Decorative elements -->
+  <circle cx="307.2" cy="307.2" r="61.44" fill="#C77DFF" opacity="0.6">
+    <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="1740.8" cy="307.2" r="51.2" fill="#FF6B9D" opacity="0.6">
+    <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="307.2" cy="1740.8" r="51.2" fill="#E0AAFF" opacity="0.6">
+    <animate attributeName="opacity" values="0.6;1;0.6" dur="1.8s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="1740.8" cy="1740.8" r="61.44" fill="#9D4EDD" opacity="0.6">
+    <animate attributeName="opacity" values="0.6;1;0.6" dur="2.2s" repeatCount="indefinite"/>
+  </circle>
+</svg>

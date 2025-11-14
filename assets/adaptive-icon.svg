@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024" height="1024" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1024" height="1024" fill="#0A0A0F" rx="204.8"/>
+  
+  <!-- Glow effect circles -->
+  <circle cx="512" cy="512" r="465.91999999999996" fill="#9D4EDD" opacity="0.3">
+    <animate attributeName="opacity" values="0.3;0.5;0.3" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="512" cy="512" r="394.24" fill="#9D4EDD" opacity="0.4">
+    <animate attributeName="opacity" values="0.4;0.6;0.4" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Main icon - Party symbol (confetti/sparkles) -->
+  <g transform="translate(512, 512)">
+    <!-- Sparkle 1 -->
+    <path d="M 0,-215.04 L 5,-179.2 L 0,-143.35999999999999 L -5,-179.2 Z" fill="#E0AAFF"/>
+    <path d="M 0,-143.35999999999999 L 3,-107.52 L 0,-71.67999999999999 L -3,-107.52 Z" fill="#C77DFF"/>
+    
+    <!-- Sparkle 2 -->
+    <path d="M 143.35999999999999,143.35999999999999 L 179.2,184.2 L 215.04,143.35999999999999 L 179.2,174.2 Z" fill="#E0AAFF"/>
+    
+    <!-- Sparkle 3 -->
+    <path d="M -143.35999999999999,143.35999999999999 L -179.2,184.2 L -215.04,143.35999999999999 L -179.2,174.2 Z" fill="#FF6B9D"/>
+    
+    <!-- Center circle -->
+    <circle cx="0" cy="0" r="107.52" fill="#9D4EDD">
+      <animate attributeName="r" values="107.52;125.43999999999998;107.52" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+    
+    <!-- Inner glow -->
+    <circle cx="0" cy="0" r="71.67999999999999" fill="#C77DFF" opacity="0.8"/>
+  </g>
+  
+  <!-- Border glow -->
+  <rect width="1024" height="1024" fill="none" stroke="#9D4EDD" stroke-width="20.48" rx="204.8" opacity="0.5"/>
+</svg>

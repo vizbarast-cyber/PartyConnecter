@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "982593123040",
+    "project_id": "party-connect-q8z7m3",
+    "storage_bucket": "party-connect-q8z7m3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:982593123040:android:235aa9b2b57af41867d685",
+        "android_client_info": {
+          "package_name": "com.mycompany.partyconnect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "982593123040-rg5efsforta6gm396mdjgg793ff9k69b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mycompany.partyconnect",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "982593123040-vbjhf65ti83g3evn8n4nirqiuilathao.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtFX0O7ieq-gv8Cot3gVFG2PSaXxMrDRw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "982593123040-vbjhf65ti83g3evn8n4nirqiuilathao.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "982593123040-8l4to10lnnb8sp8g1t9ugg63fl56h7jc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mycompany.partyconnect"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
+
