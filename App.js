@@ -144,6 +144,7 @@ export default function App() {
   const [initializing, setInitializing] = useState(true);
   const [devModeModal, setDevModeModal] = useState(false);
   const [devPassword, setDevPassword] = useState('');
+  const [loadingError, setLoadingError] = useState(null);
   const { user, setUser, loading } = useAuthStore();
   const { checkDevMode, unlockDevMode, shouldShowModal, clearModalFlag } = useDevModeStore();
 
@@ -157,16 +158,18 @@ export default function App() {
         if (initializing) setInitializing(false);
       });
       
-      // Timeout after 10 seconds if auth doesn't respond
+      // Timeout after 5 seconds if auth doesn't respond
       timeout = setTimeout(() => {
         if (initializing) {
           console.warn('Auth initialization timeout, proceeding anyway');
           setInitializing(false);
+          setLoadingError('Connection timeout. The app may work with limited features.');
         }
-      }, 10000);
+      }, 5000);
     } catch (error) {
       console.error('Firebase auth error:', error);
       setInitializing(false);
+      setLoadingError('Failed to initialize. Please try again.');
     }
 
     try {
@@ -201,8 +204,35 @@ export default function App() {
 
   if (initializing || loading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.colors.background }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.colors.background, padding: 20 }}>
         <ActivityIndicator size="large" color={theme.colors.primary} />
+        <Text style={{ color: theme.colors.text, marginTop: 20, textAlign: 'center' }}>
+          Loading PartyConnect...
+        </Text>
+        {loadingError && (
+          <>
+            <Text style={{ color: theme.colors.error, marginTop: 20, textAlign: 'center', fontSize: 14 }}>
+              {loadingError}
+            </Text>
+            <TouchableOpacity
+              style={{
+                marginTop: 20,
+                padding: 12,
+                backgroundColor: theme.colors.primary,
+                borderRadius: theme.borderRadius.md,
+                minWidth: 120,
+              }}
+              onPress={() => {
+                setInitializing(false);
+                setLoadingError(null);
+              }}
+            >
+              <Text style={{ color: theme.colors.textLight, textAlign: 'center', fontWeight: 'bold' }}>
+                Continue Anyway
+              </Text>
+            </TouchableOpacity>
+          </>
+        )}
       </View>
     );
   }

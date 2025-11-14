@@ -66,7 +66,7 @@ module.exports = {
       eas: {
         projectId: "f1a57509-42af-48c8-bd42-8368e28857b6"
       },
-      apiUrl: process.env.EXPO_PUBLIC_API_URL || (isDev ? 'http://localhost:3000/api' : 'https://api.partyconnect.app/api'),
+      apiUrl: process.env.EXPO_PUBLIC_API_URL || (isDev ? 'http://localhost:3000/api' : 'https://partyconnect-api.onrender.com/api'),
       environment: process.env.NODE_ENV || process.env.EXPO_PUBLIC_ENV || 'production',
       googleClientId: {
         android: "982593123040-rg5efsforta6gm396mdjgg793ff9k69b.apps.googleusercontent.com",

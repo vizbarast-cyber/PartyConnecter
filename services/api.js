@@ -23,7 +23,7 @@ const getApiUrl = () => {
   const isDev = typeof __DEV__ !== 'undefined' ? __DEV__ : process.env.NODE_ENV !== 'production';
   return isDev
     ? 'http://localhost:3000/api' 
-    : 'https://api.partyconnect.app/api'; // Production API URL - update when backend is deployed
+    : 'https://partyconnect-api.onrender.com/api'; // Production API URL - Render deployment
 };
 
 const API_BASE_URL = getApiUrl();

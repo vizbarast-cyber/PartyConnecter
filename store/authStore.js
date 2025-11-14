@@ -11,9 +11,9 @@ export const useAuthStore = create((set) => ({
     set({ user: firebaseUser, loading: false });
     if (firebaseUser) {
       try {
-        // Add timeout to prevent hanging
+        // Add timeout to prevent hanging (reduced to 5 seconds)
         const timeoutPromise = new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Request timeout')), 10000)
+          setTimeout(() => reject(new Error('Request timeout')), 5000)
         );
         
         const response = await Promise.race([
@@ -31,6 +31,7 @@ export const useAuthStore = create((set) => ({
           console.error('Error fetching user profile:', error.response?.status || error.message);
         }
         // Don't set userProfile to null on error - keep existing profile if available
+        // App will continue to work even if profile fetch fails
       }
     } else {
       set({ userProfile: null });
