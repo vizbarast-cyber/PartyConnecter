@@ -149,11 +149,21 @@ export default function App() {
 
   useEffect(() => {
     let unsubscribe;
+    let timeout;
+    
     try {
       unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
         setUser(firebaseUser);
         if (initializing) setInitializing(false);
       });
+      
+      // Timeout after 10 seconds if auth doesn't respond
+      timeout = setTimeout(() => {
+        if (initializing) {
+          console.warn('Auth initialization timeout, proceeding anyway');
+          setInitializing(false);
+        }
+      }, 10000);
     } catch (error) {
       console.error('Firebase auth error:', error);
       setInitializing(false);
@@ -165,7 +175,10 @@ export default function App() {
       console.error('Dev mode check error:', error);
     }
 
-    return unsubscribe;
+    return () => {
+      if (unsubscribe) unsubscribe();
+      if (timeout) clearTimeout(timeout);
+    };
   }, [initializing]);
 
   useEffect(() => {
