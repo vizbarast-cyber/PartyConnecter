@@ -38,9 +38,13 @@ app.use(compression());
 
 // Logging
 if (NODE_ENV === 'production') {
-  // Log to file in production
+  // Log to file in production (ensure logs directory exists)
+  const logsDir = path.join(__dirname, 'logs');
+  if (!fs.existsSync(logsDir)) {
+    fs.mkdirSync(logsDir, { recursive: true });
+  }
   const accessLogStream = fs.createWriteStream(
-    path.join(__dirname, 'logs', 'access.log'),
+    path.join(logsDir, 'access.log'),
     { flags: 'a' }
   );
   app.use(morgan('combined', { stream: accessLogStream }));
